@@ -1,0 +1,16 @@
+
+Witaj {{ first_name }},
+
+Otrzmałeś tego emaila, ponieważ złożłeś prośbę o zresetowanie maila do swojego konta na naszej stronie internetowej. Aby zresetować maila, prosimy o skorzystanie z poniższego linku:
+
+{{ protocol }}://{{ domain }}{% url 'confirm_email_change' uidb64=uidb64 token=token %}
+
+
+Link ten umożliwia ustawienie nowego maila. Prosimy pamiętać, że link jest ważny tylko przez określony czas, po którym przestanie działać.
+
+Jeśli nie złożyliście prośby o zresetowanie hasła, prosimy o zignorowanie tego e-maila.
+
+Z poważaniem,
+
+Zespół obsługi klienta
+
