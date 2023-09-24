@@ -18,7 +18,6 @@ class Ingredient(models.Model):
 class Meal(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
-    ingredients = models.ManyToManyField(Ingredient, through='IngredientQuantity')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
