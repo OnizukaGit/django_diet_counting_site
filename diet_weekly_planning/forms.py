@@ -14,13 +14,15 @@ class IngredientForm(forms.ModelForm):
         exclude = ['user']
 
 
-class MealForm(forms.ModelForm):
-    class Meta:
-        model = Meal
-        fields = ['description']
+# class MealForm(forms.ModelForm):
+#     class Meta:
+#         model = Meal
+#         fields = ['name', 'description']
+#
+#
+# class IngredientQuantityForm(forms.ModelForm):
+#     class Meta:
+#         model = IngredientQuantity
+#         fields = ['ingredient', 'quantity']
 
 
-class IngredientQuantityForm(forms.ModelForm):
-    class Meta:
-        model = IngredientQuantity
-        fields = ['ingredient', 'quantity', 'meal']

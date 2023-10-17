@@ -26,7 +26,7 @@ class Meal(models.Model):
 
 class IngredientQuantity(models.Model):
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    ingredient = models.ManyToManyField(Ingredient)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):

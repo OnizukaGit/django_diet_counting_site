@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'diet_change_email',
     'diet_weekly_planning',
     'bootstrap4',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
