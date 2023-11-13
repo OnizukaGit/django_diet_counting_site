@@ -401,21 +401,21 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var day = "{{ day }}";  // Pobierz dzień z kontekstu szablonu
-
-    // Sprawdź, czy formularz istnieje na stronie
-    var form = document.querySelector('form[name="MealTimeForm"]');
-    if (form) {
-        // Znajdź pole 'name' w formularzu i ustaw jego wartość na dzień tygodnia
-        var nameField = form.querySelector('select[name="name"]');
-        if (nameField) {
-            nameField.value = day;
-        }
-    }
-});
-</script>
+{#<script>#}
+{#document.addEventListener('DOMContentLoaded', function() {#}
+{#    var day = "{{ day }}";  // Pobierz dzień z kontekstu szablonu#}
+{##}
+{#    // Sprawdź, czy formularz istnieje na stronie#}
+{#    var form = document.querySelector('form[name="MealTimeForm"]');#}
+{#    if (form) {#}
+{#        // Znajdź pole 'name' w formularzu i ustaw jego wartość na dzień tygodnia#}
+{#        var nameField = form.querySelector('select[name="name"]');#}
+{#        if (nameField) {#}
+{#            nameField.value = day;#}
+{#        }#}
+{#    }#}
+{#});#}
+{#</script>#}
                     </center>
             </div>
             <!-- End of Main Content -->

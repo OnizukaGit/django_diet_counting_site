@@ -1,48 +1,18 @@
 from diet_models.models import MealTime, Ingredient, IngredientQuantity, Meal
-from diet_weekly_planning.forms import MealTimeForm, IngredientForm
+from diet_weekly_planning.forms import MealTimeForm, IngredientForm, MealForm, AddIngredientsForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-
+from diet_weekly_planning.serializers import IngredientQuantitySerializer, MealSerializer, IngredientSerializer
+from rest_framework import status, generics
 
 class Monday(CreateView):
-    success_url = reverse_lazy('monday')
     template_name = 'diet_weekly_planning/monday.html'
-    model = MealTime
+    success_url = reverse_lazy('monday')
     form_class = MealTimeForm
-    pk_url_kwarg = 'day'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['brekfast'] = MealTime.objects.filter(name="Poniedzialek").filter(timeofday__name="Sniadanie")
-        context['lunch'] = MealTime.objects.filter(name="Poniedziałek").filter(timeofday__name="Obiad")
-        context['dinner'] = MealTime.objects.filter(name="Poniedziałek").filter(timeofday__name="Kolacja")
-        context['meal'] = MealTime.objects.filter(name="Poniedzialek").filter(timeofday__name="Sniadanie")
-        context['ingredientquantity'] = IngredientQuantity.objects.all()
-        context['ingredients'] = Ingredient.objects.all()
-        context['day'] = self.request.session.get('day_of_week', 'Poniedzialek')
-        return context
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        user = self.request.user
-        form.save()
-        return response
-
-
-@receiver(user_logged_in)
-def set_day(sender, request, user, **kwargs):
-    import datetime
-
-    days_of_week = ['Poniedzialek', 'Wtorek', 'Sroda', 'Czwartek', 'Piatek', 'Sobota', 'Niedziela']
-    today = datetime.date.today().weekday()
-    day = days_of_week[today]
-
-    request.session['day_of_week'] = day
-
 
 
 class Ingredients(CreateView):
@@ -63,13 +33,6 @@ class Ingredients(CreateView):
             return render(request, 'diet_weekly_planning/ingredients.html', context={'form': form})
 
 
-from django.http import Http404
-from rest_framework import status, generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from diet_weekly_planning.serializers import IngredientQuantitySerializer, MealSerializer, IngredientSerializer
-
-
 class IngredientQuantityViewAPI(generics.ListCreateAPIView):
     queryset = IngredientQuantity.objects.all()
     serializer_class = IngredientQuantitySerializer
@@ -79,14 +42,95 @@ class MealViewAPI(generics.ListCreateAPIView):
     queryset = Meal.objects.all()
     serializer_class = MealSerializer
 
+
 class IngredientViewAPI(generics.ListCreateAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
 
 
-class RecipesView(View):
-    def get(self, request):
-        return render(request, 'diet_weekly_planning/recipes.html')
+class RecipesView(CreateView):
+    template_name = "diet_weekly_planning/recipes.html"
+    form_class = MealForm
+    success_url = reverse_lazy('add_ingredients')
+
+    def form_valid(self, form):
+        meal = form.save(commit=False)
+        meal.user = self.request.user
+        meal.save()
+
+        self.request.session['current_meal_id'] = meal.pk
+        self.success_url = reverse_lazy('add_ingredients', kwargs={'pk': meal.pk})
+
+        return super().form_valid(form)
+
+
+class AddIngredients(CreateView):
+    template_name = "diet_weekly_planning/add_ingredients.html"
+    form_class = AddIngredientsForm
+    success_url = reverse_lazy('add_ingredients')
+    pk_url_kwarg = "pk"
+
+    def get_initial(self):
+        meal_id = self.request.session.get('current_meal_id')
+        return {'meal': meal_id}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meal_id = self.kwargs.get(self.pk_url_kwarg)
+        meal = get_object_or_404(Meal, pk=meal_id)
+        context['meals'] = meal
+        context['ingredients_quantity'] = IngredientQuantity.objects.all()
+
+        ingredients_quantity = context['ingredients_quantity']
+
+        total_ingredients_quantity = [
+            {
+                'ingredient': ingredient_quantity.ingredient,
+                'quantity': ingredient_quantity.quantity,
+                'total_gramme': ingredient_quantity.ingredient.gramme * ingredient_quantity.quantity,
+                'total_calories': ingredient_quantity.ingredient.calories * ingredient_quantity.quantity,
+                'total_carbohydrates': ingredient_quantity.ingredient.carbohydrates * ingredient_quantity.quantity,
+                'total_protein': ingredient_quantity.ingredient.protein * ingredient_quantity.quantity,
+                'total_fat': ingredient_quantity.ingredient.fat * ingredient_quantity.quantity,
+            }
+            for ingredient_quantity in ingredients_quantity
+        ]
+
+        total_gramme = sum(
+            ingredient_quantity.ingredient.gramme * ingredient_quantity.quantity for ingredient_quantity in
+            ingredients_quantity)
+        total_calories = sum(
+            ingredient_quantity.ingredient.calories * ingredient_quantity.quantity for ingredient_quantity in
+            ingredients_quantity)
+        total_carbohydrates = sum(
+            ingredient_quantity.ingredient.carbohydrates * ingredient_quantity.quantity for ingredient_quantity in
+            ingredients_quantity)
+        total_protein = sum(
+            ingredient_quantity.ingredient.protein * ingredient_quantity.quantity for ingredient_quantity in
+            ingredients_quantity)
+        total_fat = sum(ingredient_quantity.ingredient.fat * ingredient_quantity.quantity for ingredient_quantity in
+                        ingredients_quantity)
+
+        context['total_gramme'] = total_gramme
+        context['total_calories'] = total_calories
+        context['total_carbohydrates'] = total_carbohydrates
+        context['total_protein'] = total_protein
+        context['total_fat'] = total_fat
+        context['total_ingredients_quantity'] = total_ingredients_quantity
+
+        return context
+
+    def form_valid(self, form):
+        meal_id = self.request.session.get('current_meal_id')
+        meal = get_object_or_404(Meal, pk=meal_id)
+
+        ingredient = form.save(commit=False)
+        ingredient.meal = meal
+        ingredient.save()
+
+        self.success_url = reverse_lazy('add_ingredients', kwargs={'pk': meal.pk})
+        return super().form_valid(form)
+
 
 
 

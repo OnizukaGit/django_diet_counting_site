@@ -26,11 +26,11 @@ class Meal(models.Model):
 
 class IngredientQuantity(models.Model):
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
-    ingredient = models.ManyToManyField(Ingredient)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, default=1)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return str(self.quantity)
+        return f"Posiłek: {self.meal}, {self.ingredient}, Ilość : {self.quantity}"
 
 
 class TimeofDay(models.Model):

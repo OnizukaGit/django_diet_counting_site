@@ -362,9 +362,7 @@
 
 <form id="FormMeal" method="post">
     {% csrf_token %}
-    <select id="ingredient-api"></select>
-    <button onclick="AddIngredient()">Dodaj kolejny składnik</button>
-    <button onclick="DeleteIngredient()">Usuń składnik</button>
+    {{ form }}
     <button type="submit">Dodaj Posiłek</button>
 </form>
 
@@ -408,63 +406,6 @@
 
 </body>
 </html>
-
-
-
-
-    <script>
-    function FormMeal(){
-        fetch('http://127.0.0.1:8000/diet_weekly_planning/ingredient-api/2')
-            .then(response => response.json())
-            .then(data => {
-                const selectElement = document.getElementById('ingredient-api');
-
-                data.forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.text = item.name;
-                    selectElement.appendChild(option);
-                })
-            })
-            .catch(error => console.error("Błąd", error));
-    }
-
-    function AddIngredient() {
-        const newFieldSelect = document.createElement('select');
-        newFieldSelect.id = 'ingredient-api';
-
-        const selectElement = document.getElementById('ingredient-api');
-        const options = selectElement.getElementsByTagName('option');
-        for (let i = 0; i < options.length; i++) {
-            const option = document.createElement('option');
-            option.value = options[i].value;
-            option.text = options[i].text;
-            newFieldSelect.appendChild(option);
-        }
-
-        document.body.appendChild(newFieldSelect);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Usuń składnik';
-        deleteButton.onclick = function() {
-            newFieldSelect.remove();
-            deleteButton.remove();
-        };
-        document.body.appendChild(deleteButton);
-    }
-
-    function DeleteIngredient() {
-        const DeleteFieldSelect = document.getElementById('ingredient-api');
-        if (DeleteFieldSelect) {
-            DeleteFieldSelect.remove();
-        }
-    }
-
-    FormMeal();
-</script>
-
-
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
