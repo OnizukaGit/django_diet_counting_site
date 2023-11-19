@@ -55,7 +55,7 @@
                 Interface
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
@@ -92,6 +92,7 @@
                     </div>
                 </div>
             </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -291,7 +292,7 @@
                                     src="{% static 'img/undraw_profile.svg' %}">
                             </a>
                             <!-- Dropdown - User Information -->
-                           <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="{% url 'profile_view' %}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -316,14 +317,15 @@
                     </ul>
 
                 </nav>
-                <!-- End of Topbar -->
+
                 <center>
-                            <h1>Imię: <b>{{ user.first_name }}</b></h1>
-                <br>
-                    <h1>Nazwisko <b>{{ user.last_name }}</h1>
-                <br>
-                            <h1>Emial: <b>{{ user.email }}</b></h1> <a href="{% url 'change-mail' %}">Zmień Maila</a>
-                    </center>
+
+<form id="FormMeal" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Dodaj Posiłek</button>
+</form>
+
             </div>
             <!-- End of Main Content -->
 
@@ -349,6 +351,8 @@
     </a>
 
     <!-- Logout Modal-->
+{% block logout %}
+    <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -367,6 +371,7 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
@@ -377,11 +382,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
-<script>
-    var chartData = document.getElementById("chart-data");
-    var BMI = parseFloat(chartData.getAttribute("data-bmi"));
-</script>
 
 </body>
-
 </html>

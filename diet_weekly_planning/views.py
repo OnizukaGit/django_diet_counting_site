@@ -1,6 +1,6 @@
 from diet_models.models import MealTime, Ingredient, IngredientQuantity, Meal
 from diet_weekly_planning.forms import MealTimeForm, IngredientForm, MealForm, AddIngredientsForm
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from diet_weekly_planning.serializers import IngredientQuantitySerializer, MealSerializer, IngredientSerializer
 from rest_framework import status, generics
+
 
 class Monday(CreateView):
     template_name = 'diet_weekly_planning/monday.html'
@@ -52,6 +53,15 @@ class RecipesView(CreateView):
     template_name = "diet_weekly_planning/recipes.html"
     form_class = MealForm
     success_url = reverse_lazy('add_ingredients')
+    pk_url_kwarg = "pk"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meals = Meal.objects.all()
+
+        context["meals"] = meals
+
+        return context
 
     def form_valid(self, form):
         meal = form.save(commit=False)
@@ -132,13 +142,22 @@ class AddIngredients(CreateView):
         return super().form_valid(form)
 
 
+class UpdateRecipes(UpdateView):
+    template_name = "diet_weekly_planning/recipes.html"
+    success_url = reverse_lazy('recipes')
+    model = Meal
+    form_class = MealForm
+
+    def form_valid(self, form):
+        meal = self.get_object()
+        form.instance.user = self.request.user
+        form.save()
+        return super().form_valid(form)
 
 
-
-
-
-
-
+class DeleteRecipes(DeleteView):
+    success_url = reverse_lazy('recipes')
+    model = Meal
 
 
 

@@ -41,10 +41,10 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="../../../diet_site/templates/diet_site/index.html">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'index' %}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Strona Główna</span></a>
             </li>
 
             <!-- Divider -->
@@ -55,84 +55,44 @@
                 Interface
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+                    <span>Twoja dieta</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="../../../diet_site/templates/diet_site/buttons.html">Buttons</a>
-                        <a class="collapse-item" href="../../../diet_site/templates/diet_site/cards.html">Cards</a>
+                        <h6 class="collapse-header">Wybierz dzień:</h6>
+                        <a class="collapse-item" href="{% url 'monday' %}">Poniedziałek</a>
+                        <a class="collapse-item" href="cards.html">Wtorek</a>
+                        <a class="collapse-item" href="buttons.html">Środa</a>
+                        <a class="collapse-item" href="cards.html">Czwartek</a>
+                        <a class="collapse-item" href="buttons.html">Piątek</a>
+                        <a class="collapse-item" href="cards.html">Sobota</a>
+                        <a class="collapse-item" href="cards.html">Niedziela</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
+            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
+                    <span>Przepisy i składniki </span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="../../../diet_site/templates/diet_site/utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="../../../diet_site/templates/diet_site/utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="../../../diet_site/templates/diet_site/utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="../../../diet_site/templates/diet_site/utilities-other.html">Other</a>
+                        <h6 class="collapse-header">Wybierz:</h6>
+                        <a class="collapse-item" href="{% url 'ingredients' %}">Dodaj składniki</a>
+                        <a class="collapse-item"  href="{% url 'recipes' %}">Dodaj posiłek</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-                    aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="../../../diet_login/templates/diet_login/404.html">404 Page</a>
-                        <a class="collapse-item active" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="../../../diet_site/templates/diet_site/charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="../../../diet_site/templates/diet_site/tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -374,42 +334,28 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">Dzień</th>
-        <th scope="col">Posiłek</th>
-        <th scope="col">Nazwa Posiłku</th>
-        <th scope="col">Gramy (g)</th>
-        <th scope="col">Kalorie (kcal)</th>
-        <th scope="col">Węglowodany (g)</th>
-        <th scope="col">Białko (g)</th>
-        <th scope="col">Tłuszcze (g)</th>
+        <th scope="col">Posiłki :</th>
+        <th scope="col">Opis:</th>
+        <th scope="col">Autor:</th>
+
       </tr>
     </thead>
     <tbody>
-      {% for ingredient in meal %}
         <tr>
-          <input type="hidden" name="name" value="{{ day }}">
-          <td>{{ ingredient.day }}</td>
-          <td>{{ ingredient.meal }}</td>
-          <td>{{ ingredient.name }}</td>
-          <td>{{ ingredient.gramme }}</td>
-          <td>{{ ingredient.calories }}</td>
-          <td>{{ ingredient.carbohydrates }}</td>
-          <td>{{ ingredient.protein }}</td>
-          <td>{{ ingredient.fat }}</td>
+          <input type="hidden" name="name">
+            {% for meal in meals %}
+          <td>{{ meal.name }}</td>
+          <td>{{ meal.description }}</td>
+                <td>{{ meal.user }} {% if meal.user == request.user %}
+                    <a href="{% url 'update_recipes' meal.pk %}">Edytuj </a>lub
+                    <a href="{% url 'delete_recipes' meal.pk %}">Usuń</a>{% endif %}
+                </td>
 
-        {{ brekfast }}
         </tr>
-      {% endfor %}
+    {% endfor %}
     </tbody>
   </table>
 </div>
-
-</body>
-</html>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
             </div>
             <!-- End of Main Content -->
 

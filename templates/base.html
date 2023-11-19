@@ -1,6 +1,4 @@
 {% load static %}
-
-{% block head %}
 <html lang="en">
 <head>
 
@@ -22,8 +20,6 @@
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
 </head>
-{% endblock %}
-
 
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -31,7 +27,6 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-{% block sidebar %}
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
                 <div class="sidebar-brand-icon rotate-n-15">
@@ -42,13 +37,12 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-
+            <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'index' %}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Strona Główna</span></a>
             </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -78,6 +72,7 @@
                 </div>
             </li>
 
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -93,14 +88,6 @@
                     </div>
                 </div>
             </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -160,8 +147,7 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-{% endblock %}
-{% block search %}
+
 
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -175,9 +161,7 @@
                             </div>
                         </div>
                     </form>
-{% endblock %}
 
-{% block navbar %}
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -321,19 +305,16 @@
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                             </div>
                         </li>
-{% endblock %}
+
                         <div class="topbar-divider d-none d-sm-block"></div>
-{% block user-information %}
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                    {% block account %}
                                     {% if user.is_authenticated %}
                                     <p>Witaj, {{ user.first_name }}</p>
                                     {% endif %}
-                                        {% endblock %}
                                         </span>
                                 <img class="img-profile rounded-circle"
                                     src="{% static 'img/undraw_profile.svg' %}">
@@ -364,11 +345,9 @@
                     </ul>
 
                 </nav>
-{% endblock %}
 
                 <!-- Begin Page Content -->
 
-{% block dashboard-and-generate-raport %}
                  <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -376,9 +355,7 @@
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
-{% endblock %}
 
-{% block content-row %}
 
                     <!-- Content Row -->
                     <div class="row">
@@ -466,10 +443,7 @@
                             </div>
                         </div>
                     </div>
-{% endblock %}
 
-
-{% block area-chart %}
                      <div class="row">
                         <div class="col-xl-8 col-lg-7">
 
@@ -491,8 +465,7 @@
 
                 </div>
 
-{% endblock %}
-{% block pie-chart %}
+
                         <!-- Pie Chart -->
                         <div class="col-xl-4 col-lg-5">
                             <div class="card shadow mb-4">
@@ -537,12 +510,10 @@
                             </div>
                         </div>
                     </div>
-{% endblock %}
                     <div class="row">
 
 
 
-{% block footer %}
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -552,7 +523,6 @@
                 </div>
             </footer>
             <!-- End of Footer -->
-{% endblock %}
         </div>
         <!-- End of Content Wrapper -->
 
@@ -563,7 +533,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-{% block logout %}
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -583,8 +552,7 @@
             </div>
         </div>
     </div>
-{% endblock %}
-{% block js %}
+
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -605,7 +573,6 @@
         var chartData = document.getElementById("chart-data");
         var BMI = parseFloat(chartData.getAttribute("data-bmi"));
     </script>
-{% endblock %}
             </div>
             </div>
     </div>
