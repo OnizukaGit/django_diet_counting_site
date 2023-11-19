@@ -1,13 +1,9 @@
-from diet_models.models import MealTime, Ingredient, IngredientQuantity, Meal
+from diet_models.models import Ingredient, IngredientQuantity, Meal
 from diet_weekly_planning.forms import MealTimeForm, IngredientForm, MealForm, AddIngredientsForm
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
-from django.dispatch import receiver
-from django.contrib.auth.signals import user_logged_in
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from diet_weekly_planning.serializers import IngredientQuantitySerializer, MealSerializer, IngredientSerializer
-from rest_framework import status, generics
 
 
 class Monday(CreateView):
@@ -16,7 +12,7 @@ class Monday(CreateView):
     form_class = MealTimeForm
 
 
-class Ingredients(CreateView):
+class Ingredients(View):
     def get(self, request):
         form = IngredientForm()
         ingredients = Ingredient.objects.all()
@@ -32,21 +28,6 @@ class Ingredients(CreateView):
             return redirect('ingredients')
         else:
             return render(request, 'diet_weekly_planning/ingredients.html', context={'form': form})
-
-
-class IngredientQuantityViewAPI(generics.ListCreateAPIView):
-    queryset = IngredientQuantity.objects.all()
-    serializer_class = IngredientQuantitySerializer
-
-
-class MealViewAPI(generics.ListCreateAPIView):
-    queryset = Meal.objects.all()
-    serializer_class = MealSerializer
-
-
-class IngredientViewAPI(generics.ListCreateAPIView):
-    queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
 
 
 class RecipesView(CreateView):
@@ -155,14 +136,9 @@ class UpdateRecipes(UpdateView):
         return super().form_valid(form)
 
 
-class DeleteRecipes(DeleteView):
-    success_url = reverse_lazy('recipes')
-    model = Meal
-
-
-
-
-
-
-
+class DeleteRecipes(View):
+    def get(self, request, pk):
+        meal_id = Meal.objects.get(pk=pk)
+        meal_id.delete()
+        return redirect('recipes')
 

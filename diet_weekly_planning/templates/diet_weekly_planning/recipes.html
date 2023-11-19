@@ -320,7 +320,7 @@
 
                 <center>
 
-<form id="FormMeal" method="post">
+<form method="post">
     {% csrf_token %}
     {{ form }}
     <button type="submit">Dodaj Posiłek</button>
@@ -348,7 +348,8 @@
           <td>{{ meal.description }}</td>
                 <td>{{ meal.user }} {% if meal.user == request.user %}
                     <a href="{% url 'update_recipes' meal.pk %}">Edytuj </a>lub
-                    <a href="{% url 'delete_recipes' meal.pk %}">Usuń</a>{% endif %}
+                    <a href="{% url 'delete_recipes' meal.pk %}">Usuń</a>
+                {% endif %}
                 </td>
 
         </tr>
