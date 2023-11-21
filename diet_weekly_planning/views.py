@@ -71,8 +71,7 @@ class AddIngredients(CreateView):
         meal = get_object_or_404(Meal, pk=meal_id)
         context['meals'] = meal
         context['ingredients_quantity'] = IngredientQuantity.objects.all()
-
-        ingredients_quantity = context['ingredients_quantity']
+        ingredients_quantity = IngredientQuantity.objects.filter(meal__pk=meal_id)
 
         total_ingredients_quantity = [
             {
