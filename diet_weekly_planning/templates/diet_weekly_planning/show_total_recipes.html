@@ -319,47 +319,46 @@
                 </nav>
 
                 <center>
+<h1>Posiłek: {{ meal.name }}</h1>
+<p>Opis: {{ meal.description }}</p>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Dodaj Posiłek</button>
-</form>
+<h2>Składniki:</h2>
 
-
-
-
-
-<div class="container mt-5">
-  <table class="table">
+                <table class="table">
     <thead>
-      <tr>
-        <th scope="col">Posiłki :</th>
-        <th scope="col">Opis:</th>
-        <th scope="col">Autor:</th>
-
-      </tr>
+        <tr>
+            <th scope="col">Składnik</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Gramy (g)</th>
+            <th scope="col">Kalorie (kcal)</th>
+            <th scope="col">Węglowodany (g)</th>
+            <th scope="col">Białko (g)</th>
+            <th scope="col">Tłuszcze (g)</th>
+        </tr>
     </thead>
     <tbody>
+        {% for ingredient in ingredients %}
         <tr>
-          <input type="hidden" name="name">
-            {% for meal in meals %}
-          <td>{{ meal.name }}</td>
-          <td>{{ meal.description }}</td>
-                <td>{{ meal.user.email }} <br><br>
-                    {% if meal.user == request.user %}
-                    <a href="{% url 'update_recipes' meal.pk %}">Edytuj </a>lub
-                    <a href="{% url 'delete_recipes' meal.pk %}">Usuń</a>
-                    <a href="{% url 'show_total_meals' meal.pk %}">Pokaż przepis</a>
-
-                {% endif %}
-                </td>
-
+            <td>{{ ingredient.ingredient.name }}</td>
+            <td>{{ ingredient.quantity }}</td>
+            <td>{{ ingredient.ingredient.gramme }}</td>
+            <td>{{ ingredient.ingredient.calories }}</td>
+            <td>{{ ingredient.ingredient.carbohydrates }}</td>
+            <td>{{ ingredient.ingredient.protein }}</td>
+            <td>{{ ingredient.ingredient.fat }}</td>
         </tr>
-    {% endfor %}
+        {% endfor %}
+        <tr style="border-top: 2px solid #000;">
+            <td>Suma</td>
+            <td></td>
+            <td>{{ total_gramme }}</td>
+            <td>{{ total_calories }}</td>
+            <td>{{ total_carbohydrates }}</td>
+            <td>{{ total_protein }}</td>
+            <td>{{ total_fat }}</td>
+        </tr>
     </tbody>
-  </table>
-</div>
+</table>
             </div>
             <!-- End of Main Content -->
 
@@ -367,7 +366,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Your Website </span>
                     </div>
                 </div>
             </footer>

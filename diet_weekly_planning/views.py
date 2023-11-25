@@ -1,10 +1,10 @@
 from diet_models.models import Ingredient, IngredientQuantity, Meal
 from diet_weekly_planning.forms import MealTimeForm, IngredientForm, MealForm, AddIngredientsForm
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, FormView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-
+from django.db.models import Sum
 
 class Monday(CreateView):
     template_name = 'diet_weekly_planning/monday.html'
@@ -140,4 +140,35 @@ class DeleteRecipes(View):
         meal_id = Meal.objects.get(pk=pk)
         meal_id.delete()
         return redirect('recipes')
+
+
+class ShowTotalMeals(View):
+    def get(self, request, pk):
+        meal = get_object_or_404(Meal, pk=pk)
+
+        # Pobranie wszystkich składników dla danego posiłku
+        ingredients = IngredientQuantity.objects.filter(meal=meal)
+
+        # Obliczenia dla każdego makroskładnika
+        ingredients_totals = ingredients.aggregate(
+            total_gramme=Sum('ingredient__gramme'),
+            total_calories=Sum('ingredient__calories'),
+            total_carbohydrates=Sum('ingredient__carbohydrates'),
+            total_protein=Sum('ingredient__protein'),
+            total_fat=Sum('ingredient__fat')
+        )
+
+        # Przekazanie obliczonych wartości do kontekstu
+        context = {
+            'meal': meal,
+            'ingredients': ingredients,
+            'total_gramme': ingredients_totals['total_gramme'] or 0,
+            'total_calories': ingredients_totals['total_calories'] or 0,
+            'total_carbohydrates': ingredients_totals['total_carbohydrates'] or 0,
+            'total_protein': ingredients_totals['total_protein'] or 0,
+            'total_fat': ingredients_totals['total_fat'] or 0,
+        }
+
+        return render(request, "diet_weekly_planning/show_total_recipes.html", context=context)
+
 
