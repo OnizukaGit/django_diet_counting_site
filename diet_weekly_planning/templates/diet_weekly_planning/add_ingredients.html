@@ -31,13 +31,6 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-            </a>
-
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
@@ -72,12 +65,12 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Wybierz dzień:</h6>
                         <a class="collapse-item" href="{% url 'monday' %}">Poniedziałek</a>
-                        <a class="collapse-item" href="cards.html">Wtorek</a>
-                        <a class="collapse-item" href="buttons.html">Środa</a>
-                        <a class="collapse-item" href="cards.html">Czwartek</a>
-                        <a class="collapse-item" href="buttons.html">Piątek</a>
-                        <a class="collapse-item" href="cards.html">Sobota</a>
-                        <a class="collapse-item" href="cards.html">Niedziela</a>
+                        <a class="collapse-item" href="{% url 'tuesday' %}">Wtorek</a>
+                        <a class="collapse-item" href="{% url 'wednesday' %}">Środa</a>
+                        <a class="collapse-item" href="{% url 'thursday' %}">Czwartek</a>
+                        <a class="collapse-item" href="{% url 'friday' %}">Piątek</a>
+                        <a class="collapse-item" href="{% url 'saturday' %}">Sobota</a>
+                        <a class="collapse-item" href="{% url 'sunday' %}">Niedziela</a>
                     </div>
                 </div>
             </li>

@@ -47,23 +47,23 @@ class TimeofDay(models.Model):
 
 
 class MealTime(models.Model):
-    options = (
-        ('Poniedzialek','Poniedziałek'),
-        ('Wtorek','Wtorek'),
-        ('Sroda','Środa'),
-        ('Czwartek','Czwartek'),
-        ('Piatek','Piątek'),
-        ('Sobota','Sobota'),
-        ('Niedziela','Niedziela'),
+    DAY_CHOICES = (
+        ('Mon', 'Poniedziałek'),
+        ('Tue', 'Wtorek'),
+        ('Wed', 'Środa'),
+        ('Thu', 'Czwartek'),
+        ('Fri', 'Piątek'),
+        ('Sat', 'Sobota'),
+        ('Sun', 'Niedziela'),
     )
 
-    name = models.CharField(choices=options, null=True, blank=True)
+    day = models.CharField(choices=DAY_CHOICES, max_length=3, default='Mon')
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE, null=True, blank=True)
     timeofday = models.ForeignKey(TimeofDay, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.first_name} {self.name}"
+        return f"{self.meal}"
 
 
 class BMI(models.Model):

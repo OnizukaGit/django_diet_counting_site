@@ -3,9 +3,17 @@ from diet_models.models import MealTime, Ingredient, Meal, IngredientQuantity
 
 
 class MealTimeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        current_day = kwargs.pop('current_day', None)
+        super().__init__(*args, **kwargs)
+        if current_day:
+            self.fields['day'].initial = current_day
     class Meta:
         model = MealTime
-        fields = ['timeofday', 'meal']
+        fields = ['day','timeofday', 'meal']
+        widgets = {
+            'day' : forms.HiddenInput(),
+        }
 
 
 class IngredientForm(forms.ModelForm):

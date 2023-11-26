@@ -1,15 +1,116 @@
 from diet_models.models import Ingredient, IngredientQuantity, Meal
-from diet_weekly_planning.forms import MealTimeForm, IngredientForm, MealForm, AddIngredientsForm
+from diet_weekly_planning.forms import MealTimeForm, IngredientForm, MealForm, AddIngredientsForm, MealTime
 from django.views.generic import CreateView, UpdateView, FormView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.db.models import Sum
+from django.db.models import Sum, F
+
 
 class Monday(CreateView):
     template_name = 'diet_weekly_planning/monday.html'
     success_url = reverse_lazy('monday')
     form_class = MealTimeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['current_day'] = 'Mon'
+        return context
+
+    def form_valid(self, form):
+        form.instance.day = 'Mon'
+
+        return super().form_valid(form)
+
+
+class Tuesday(CreateView):
+    template_name = 'diet_weekly_planning/tuesday.html'
+    success_url = reverse_lazy('tuesday')
+    form_class = MealTimeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['current_day'] = 'The'
+        return context
+
+    def form_valid(self, form):
+        form.instance.day = 'Thue'
+        return super().form_valid(form)
+
+
+class Wednesday(CreateView):
+    template_name = 'diet_weekly_planning/wednesday.html'
+    success_url = reverse_lazy('wednesday')
+    form_class = MealTimeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['current_day'] = 'Wed'
+        return context
+
+    def form_valid(self, form):
+        form.instance.day = 'Wed'
+        return super().form_valid(form)
+
+
+class Thursday(CreateView):
+    template_name = 'diet_weekly_planning/thursday.html'
+    success_url = reverse_lazy('thursday')
+    form_class = MealTimeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['current_day'] = 'Thu'
+        return context
+
+    def form_valid(self, form):
+        form.instance.day = 'Thu'
+        return super().form_valid(form)
+
+
+class Friday(CreateView):
+    template_name = 'diet_weekly_planning/friday.html'
+    success_url = reverse_lazy('friday')
+    form_class = MealTimeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['current_day'] = 'Fri'
+        return context
+
+    def form_valid(self, form):
+        form.instance.day = 'Fri'
+        return super().form_valid(form)
+
+
+class Saturday(CreateView):
+    template_name = 'diet_weekly_planning/saturday.html'
+    success_url = reverse_lazy('saturday')
+    form_class = MealTimeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['current_day'] = 'Sat'
+        return context
+
+    def form_valid(self, form):
+        form.instance.day = 'Sat'
+        return super().form_valid(form)
+
+
+class Sunday(CreateView):
+    template_name = 'diet_weekly_planning/sunday.html'
+    success_url = reverse_lazy('sunday')
+    form_class = MealTimeForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['current_day'] = 'Sun'
+        return context
+
+    def form_valid(self, form):
+        form.instance.day = 'Sun'
+        return super().form_valid(form)
 
 
 class Ingredients(View):
@@ -71,7 +172,18 @@ class AddIngredients(CreateView):
         meal = get_object_or_404(Meal, pk=meal_id)
         context['meals'] = meal
         context['ingredients_quantity'] = IngredientQuantity.objects.all()
+
         ingredients_quantity = IngredientQuantity.objects.filter(meal__pk=meal_id)
+
+        aggregated_quantity = ingredients_quantity.aggregate(
+            total_gramme=Sum(F('ingredient__gramme') * F('quantity')),
+            total_calories=Sum(F('ingredient__calories') * F('quantity')),
+            total_carbohydrates=Sum(F('ingredient__carbohydrates') * F('quantity')),
+            total_protein=Sum(F('ingredient__protein') * F('quantity')),
+            total_fat=Sum(F('ingredient__fat') * F('quantity'))
+        )
+
+        context.update(aggregated_quantity)
 
         total_ingredients_quantity = [
             {
@@ -86,26 +198,26 @@ class AddIngredients(CreateView):
             for ingredient_quantity in ingredients_quantity
         ]
 
-        total_gramme = sum(
-            ingredient_quantity.ingredient.gramme * ingredient_quantity.quantity for ingredient_quantity in
-            ingredients_quantity)
-        total_calories = sum(
-            ingredient_quantity.ingredient.calories * ingredient_quantity.quantity for ingredient_quantity in
-            ingredients_quantity)
-        total_carbohydrates = sum(
-            ingredient_quantity.ingredient.carbohydrates * ingredient_quantity.quantity for ingredient_quantity in
-            ingredients_quantity)
-        total_protein = sum(
-            ingredient_quantity.ingredient.protein * ingredient_quantity.quantity for ingredient_quantity in
-            ingredients_quantity)
-        total_fat = sum(ingredient_quantity.ingredient.fat * ingredient_quantity.quantity for ingredient_quantity in
-                        ingredients_quantity)
-
-        context['total_gramme'] = total_gramme
-        context['total_calories'] = total_calories
-        context['total_carbohydrates'] = total_carbohydrates
-        context['total_protein'] = total_protein
-        context['total_fat'] = total_fat
+        # total_gramme = sum(
+        #     ingredient_quantity.ingredient.gramme * ingredient_quantity.quantity for ingredient_quantity in
+        #     ingredients_quantity)
+        # total_calories = sum(
+        #     ingredient_quantity.ingredient.calories * ingredient_quantity.quantity for ingredient_quantity in
+        #     ingredients_quantity)
+        # total_carbohydrates = sum(
+        #     ingredient_quantity.ingredient.carbohydrates * ingredient_quantity.quantity for ingredient_quantity in
+        #     ingredients_quantity)
+        # total_protein = sum(
+        #     ingredient_quantity.ingredient.protein * ingredient_quantity.quantity for ingredient_quantity in
+        #     ingredients_quantity)
+        # total_fat = sum(ingredient_quantity.ingredient.fat * ingredient_quantity.quantity for ingredient_quantity in
+        #                 ingredients_quantity)
+        #
+        # context['total_gramme'] = total_gramme
+        # context['total_calories'] = total_calories
+        # context['total_carbohydrates'] = total_carbohydrates
+        # context['total_protein'] = total_protein
+        # context['total_fat'] = total_fat
         context['total_ingredients_quantity'] = total_ingredients_quantity
 
         return context
@@ -146,10 +258,8 @@ class ShowTotalMeals(View):
     def get(self, request, pk):
         meal = get_object_or_404(Meal, pk=pk)
 
-        # Pobranie wszystkich składników dla danego posiłku
         ingredients = IngredientQuantity.objects.filter(meal=meal)
 
-        # Obliczenia dla każdego makroskładnika
         ingredients_totals = ingredients.aggregate(
             total_gramme=Sum('ingredient__gramme'),
             total_calories=Sum('ingredient__calories'),
@@ -158,7 +268,6 @@ class ShowTotalMeals(View):
             total_fat=Sum('ingredient__fat')
         )
 
-        # Przekazanie obliczonych wartości do kontekstu
         context = {
             'meal': meal,
             'ingredients': ingredients,
